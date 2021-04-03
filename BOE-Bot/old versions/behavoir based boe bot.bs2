@@ -1,0 +1,91 @@
+' {$STAMP BS2}
+' {$PBASIC 2.5}
+' goal is to make robotic behaviors
+
+pulsecount VAR Byte
+counter VAR Nib
+old7 VAR Bit
+old5 VAR Bit
+i VAR Word
+counter = 1
+old7 = 0
+old5 = 1
+
+
+FREQOUT 4, 2000, 3000
+'---------------------------------------------------------------
+regularbehavior:'AI u-turn if stuck
+FOR i = 0 TO 1000
+  IF (IN7 <> IN5)THEN
+    counter = counter + 1
+    old7 = IN7
+    old5 = IN5
+    IF (counter >4) THEN
+      counter = 1
+      GOSUB backup
+      GOSUB turnleft
+      GOSUB turnleft
+    ENDIF
+  ENDIF
+'---------------------------------------------------------------
+'room roaming
+  IF (IN5 = 0) AND (IN7 = 0) THEN
+    HIGH 10
+    HIGH 1
+    GOSUB backup
+    GOSUB turnleft
+    GOSUB turnleft
+  ELSEIF (IN5 = 0) THEN
+    HIGH 10
+    GOSUB backup
+    GOSUB turnright
+
+  ELSEIF (IN7 = 0) THEN
+    HIGH 1
+    GOSUB backup
+    GOSUB turnleft
+
+  ELSE
+    LOW 10
+    LOW 1
+    GOSUB forwardpulse
+  ENDIF
+NEXT
+GOTO tired
+
+tired:
+DO
+  PULSOUT 13, 760
+  PULSOUT 12, 736
+  PAUSE 20
+LOOP UNTIL (IN5 = 0) OR (IN7 = 0)
+GOTO regularbehavior
+forwardpulse:
+  PULSOUT 13, 820
+  PULSOUT 12, 650 ' used to be 850 but is set for correction
+  PAUSE 20
+  RETURN
+
+turnleft:
+  FOR pulsecount = 0 TO 20
+    PULSOUT 13, 650
+    PULSOUT 12, 650
+    PAUSE 20
+  NEXT
+  RETURN
+
+turnright:
+  FOR pulsecount = 0 TO 20
+    PULSOUT 13, 850
+    PULSOUT 12, 850
+    PAUSE 20
+  NEXT
+  RETURN
+
+backup:
+  FOR pulsecount = 0 TO 40
+    PULSOUT 13, 650
+    PULSOUT 12, 850
+    PAUSE 20
+  NEXT
+  RETURN

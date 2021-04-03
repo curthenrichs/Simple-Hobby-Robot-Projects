@@ -1,0 +1,128 @@
+' {$STAMP BS2}
+' {$PBASIC 2.5}
+
+pulsecount    VAR   Byte
+counter       VAR   Nib
+old7          VAR   Bit
+old5          VAR   Bit
+tleft         VAR   Word
+tright        VAR   Word
+i             VAR   Byte
+counter2      VAR   Byte
+
+counter = 1
+old7 = 0
+old5 = 1
+
+
+FREQOUT 4, 2000, 3000
+
+main:
+DO
+  LOW 10
+  LOW 1
+  HIGH 6
+  PAUSE 1
+  RCTIME 6, 1, tleft
+
+  HIGH 3
+  PAUSE 1
+  RCTIME 3, 1, tright
+
+ 'IF tleft < 500 AND tright < 500 AND tleft > 00000 AND tright > 00000 AND counter2 = 0   THEN
+  '   LOW 2
+   '  GOTO noise
+
+ 'ELSEIF tleft > 600 AND tright > 600 AND counter2 = 1 THEN
+
+  ' counter2 = 0
+'-------------------------------------------------------------------------------
+ ' ENDIF
+  IF tleft < tright THEN
+    PULSOUT 13, 780
+    PULSOUT 12, 650
+    PAUSE 20
+  ELSEIF tleft > tright THEN
+    PULSOUT 13, 850
+    PULSOUT 12, 720
+    PAUSE 20
+  ELSEIF tleft = tright THEN
+    GOSUB forwardpulse
+  ENDIF
+LOOP UNTIL IN7 = 0 OR IN5 = 0
+GOTO touchdession
+
+touchdession:
+  IF (IN7 <> IN5)THEN
+    counter = counter + 1
+    old7 = IN7
+    old5 = IN5
+    IF (counter >4) THEN
+      counter = 1
+      GOSUB backup
+      GOSUB turnleft
+      GOSUB turnleft
+    ENDIF
+  ENDIF
+  IF (IN5 = 0) AND (IN7 = 0) THEN
+    HIGH 10
+    HIGH 1
+    GOSUB backup
+    GOSUB turnleft
+    GOSUB turnleft
+  ELSEIF (IN5 = 0) THEN
+    HIGH 10
+    GOSUB backup
+    GOSUB turnright
+
+  ELSEIF (IN7 = 0) THEN
+    HIGH 1
+    GOSUB backup
+    GOSUB turnleft
+
+  ELSE
+    LOW 10
+    LOW 1
+    GOSUB forwardpulse
+  ENDIF
+GOTO main
+
+'-----------------------------------sub routines--------------------------------
+forwardpulse:
+DO
+  PULSOUT 13, 850
+  PULSOUT 12, 650 ' used to be 850 but is set for correction
+  PAUSE 20
+
+  RETURN
+LOOP
+
+turnleft:
+  FOR pulsecount = 0 TO 20
+    PULSOUT 13, 650
+    PULSOUT 12, 650
+    PAUSE 20
+  NEXT
+  RETURN
+
+turnright:
+  FOR pulsecount = 0 TO 20
+    PULSOUT 13, 850
+    PULSOUT 12, 850
+    PAUSE 20
+  NEXT
+  RETURN
+
+backup:
+  FOR pulsecount = 0 TO 40
+    PULSOUT 13, 650
+    PULSOUT 12, 850
+    PAUSE 20
+  NEXT
+  RETURN
+
+noise:
+  counter2 = 1
+  HIGH 2
+
+  RETURN

@@ -1,0 +1,17 @@
+' {$STAMP BS2}
+' {$PBASIC 2.5}
+
+tleft  VAR Word
+
+PAUSE 1000
+
+DO
+
+  HIGH 6
+  PAUSE 1
+  RCTIME 6, 1, tleft
+
+  DEBUG HOME, "tleft = ", DEC5 tleft
+  PAUSE 100
+
+LOOP

@@ -1,0 +1,260 @@
+' {$STAMP BS2}
+' {$PBASIC 2.5}
+
+'===============================================================================
+'                     Memory Allocation and Initialization
+'===============================================================================
+
+'Hardware defined constants
+LIGHT_SENSE_LEFT      CON   6
+LIGHT_SENSE_RIGHT     CON   3
+BUZZER                CON   4
+TOUCH_SENSE_LEFT      VAR   IN5
+TOUCH_SENSE_RIGHT     VAR   IN7
+LED_LEFT              CON   10
+LED_RIGHT             CON   1
+MOTOR_LEFT            CON   12
+MOTOR_RIGHT           CON   13
+
+'Memory Allocation
+'used as loop incrementor in non-pulse based move functions
+pulseCount            VAR   Byte
+'sores counter to determine if stuck in corner
+cornerCounter         VAR   Byte
+cornerCounter = 0
+'stores the left light sensor value
+lightLvlLeft          VAR   Word
+'stores the right light sensor value
+lightLvlRight         VAR   Word
+'used as loop incrementor in wallBangerLoop
+i                     VAR   Byte
+
+'===============================================================================
+'                                   Main
+'===============================================================================
+
+'Name: main
+'Purpose: Runs the BOE-bot light seeking program until hits
+'         an obstacle which then resorts to avoidance behavior
+'Inputs: expects all allocation and initial assignments for
+'        variables.
+'Outputs: none (never exits)
+main:
+
+'Initial startup frequency to notify that the program has
+'indeed started
+FREQOUT BUZZER, 2000, 3000
+
+'run the robot program forever!
+DO
+  'turn off LEDs
+  LOW LED_LEFT
+  LOW LED_RIGHT
+
+  'IF touch sensors are not pressed then follow the light
+  IF TOUCH_SENSE_RIGHT = 1 AND TOUCH_SENSE_LEFT = 1 THEN
+
+    'read the light values from sensors
+    HIGH LIGHT_SENSE_LEFT
+    PAUSE 1
+    RCTIME LIGHT_SENSE_LEFT, 1, lightLvlLeft
+    HIGH LIGHT_SENSE_RIGHT
+    PAUSE 1
+    RCTIME LIGHT_SENSE_RIGHT, 1, lightLvlRight
+
+    'If the light level low then ignore the light sensor behavior AND just run a
+    'wall banger script for a bit
+    IF (lightLvlLeft < 100 AND lightLvlRight < 100)THEN
+       GOSUB wallBangerLoop 'will kick out of loop after some time period
+    'If the light level too high then ignore the light sensor behavior AND just run a
+    'wall banger script for a bit
+    ELSEIF(lightLvlLeft > 20000 AND lightLvlRight > 20000) THEN
+      GOSUB wallBangerLoop 'will kick out of loop after some time period
+    'If the left has less light than right side then turn right
+    ELSEIF lightLvlLeft < lightLvlRight THEN
+      GOSUB rightPulseSoft
+    'If the right has less light than left side then turn left
+    ELSEIF lightLvlLeft > lightLvlRight THEN
+      GOSUB leftPulseSoft
+    'If they are equal value then go straight
+    ELSE
+      GOSUB forwardPulse
+   ENDIF
+
+  'touch sensors are pressed determine which one it is and take evasive action
+  ELSE
+    GOSUB takeEvasiveAction
+  ENDIF
+LOOP
+
+'==============================================================================
+'                                Subroutines
+'==============================================================================
+
+'Name: wallBangerLoop
+'Purpose: Implements a simple wall banger routine that goes forward until hits
+'         object, then it turns and then goes forward again. This is a blocking
+'         routine that will take 100 iterations of the behavior (approximately
+'         2 seconds).
+'Inputs: none
+'Outputs: none
+wallBangerLoop:
+  FOR i = 0 TO 100
+    IF TOUCH_SENSE_RIGHT = 1 AND TOUCH_SENSE_LEFT = 1 THEN
+      GOSUB forwardPulse
+    ELSE
+      GOSUB takeEvasiveAction
+    ENDIF
+  NEXT
+  RETURN
+
+
+'Name: takeEvasiveAction
+'Purpose: This routine should be called if either of the touch
+'         sensors have been activated. If not this routine will
+'         so nothing. If a touch sensor is activated then the
+'         routine will back away from the source of collision
+'         then turn left, right, or to avoid the collision
+'         again.
+'Inputs: cornerCounter used to determine if robot stuck in corner
+'        also routine accesses hardware for sensors, LEDs, motors
+'Outputs: none
+takeEvasiveAction:
+  'IF the touch sensors are not both active then increment
+  'a counter since BOE-bot may be in a corner, if enough times
+  'in this then BOE-bot will backup and spin 180
+  IF (TOUCH_SENSE_RIGHT <> TOUCH_SENSE_LEFT)THEN
+    cornerCounter = cornerCounter + 1
+    'In a corner so backup and leave corner
+    IF (cornerCounter > 4) THEN
+      cornerCounter = 0
+      HIGH LED_LEFT
+      HIGH LED_RIGHT
+      GOSUB backup
+      LOW LED_LEFT
+      LOW LED_RIGHT
+      GOSUB turnLeft
+      HIGH LED_LEFT
+      HIGH LED_RIGHT
+      GOSUB turnLeft
+    ENDIF
+  ENDIF
+
+  'IF both sensors pressed then turn 180 degrees
+  IF (TOUCH_SENSE_LEFT = 0) AND (TOUCH_SENSE_RIGHT = 0) THEN
+    HIGH LED_LEFT
+    HIGH LED_RIGHT
+    GOSUB backup
+    GOSUB turnLeft
+    GOSUB turnLeft
+  'If left sensor is pressed the turn right
+  ELSEIF (TOUCH_SENSE_LEFT = 0) THEN
+    HIGH LED_LEFT
+    GOSUB backup
+    GOSUB turnRight
+  'If right sensor is pressed then turn left
+  ELSEIF (TOUCH_SENSE_RIGHT = 0) THEN
+    HIGH LED_RIGHT
+    GOSUB backup
+    GOSUB turnLeft
+  ENDIF
+  RETURN
+
+
+'Name: turnLeft
+'Purpose: turns BOE-bot by 90 deg to left
+'Inputs: pulsecount is used in loop
+'Outputs: none
+turnLeft:
+  FOR pulseCount = 0 TO 20
+    GOSUB leftPulseHard
+  NEXT
+  RETURN
+
+
+'Name: turnRight
+'Purpose: turns BOE-bot by 90 deg to right
+'Inputs: pulsecount is used in loop
+'Outputs: none
+turnRight:
+  FOR pulseCount = 0 TO 20
+    GOSUB rightPulseHard
+  NEXT
+  RETURN
+
+
+'Name: backup
+'Purpose: backs up BOE-bot approximately a foot
+'Inputs pulsecount is used in loop
+'Outputs: none
+backup:
+  FOR pulseCount = 0 TO 40
+    GOSUB backupPulse
+  NEXT
+  RETURN
+
+
+'Name: forwardPulse
+'Purpose: Moves BOE-bot forward for 20ms
+'Inputs: none
+'Outputs: none
+forwardPulse:
+  PULSOUT MOTOR_RIGHT, 850
+  PULSOUT MOTOR_LEFT, 650 ' used to be 850 but is set for correction
+  PAUSE 20
+  RETURN
+
+
+'Name: leftPulseHard
+'Purpose: Moves BOE-bot hard left for 20ms
+'Inputs: none
+'Ouputs: none
+leftPulseHard:
+  PULSOUT MOTOR_RIGHT, 650
+  PULSOUT MOTOR_LEFT, 650
+  PAUSE 20
+  RETURN
+
+
+'Name: leftPulseSoft
+'Purpose: Moves BOE-bot softly left for 20ms
+'Inputs: none
+'Outputs: none
+leftPulseSoft:
+  PULSOUT MOTOR_RIGHT, 850
+  PULSOUT MOTOR_LEFT, 720
+  PAUSE 20
+  RETURN
+
+
+'Name: rightPulseHard
+'Purpose: Moves BOE-bot hard right for 20ms
+'Inputs: none
+'Outputs: none
+rightPulseHard:
+  PULSOUT MOTOR_RIGHT, 850
+  PULSOUT MOTOR_LEFT, 850
+  PAUSE 20
+  RETURN
+
+
+'Name: rightPulseSoft
+'Purpose: Moves BOE-bot softly right for 20ms
+'Inputs: none
+'Outputs: none
+rightPulseSoft:
+  PULSOUT MOTOR_RIGHT, 780
+  PULSOUT MOTOR_LEFT, 650
+  PAUSE 20
+  RETURN
+
+
+'Name: backupPulse
+'Purpose: Moves BOE-bot backwards for 20ms
+'Inputs: none
+'Outputs: none
+backupPulse:
+  PULSOUT MOTOR_RIGHT, 650
+  PULSOUT MOTOR_LEFT, 850
+  PAUSE 20
+  RETURN
