@@ -11,5 +11,7 @@ subsumption architecture. At the highest level is the light seeking routine. The
 at a mid-level (when the light level is too low) is a simple wall-banger routine.
 And of course at the lowest level is the basic motor behavior.
 
-## Fork Notes
-This repo was forked from my alt github account that I am going to be deleting soon.
+See [kit](https://www.parallax.com/product/boe-bot-robot-kit-usb/) for details on
+deployment. I highly recommend starting robotics with pre-built kits that place
+constraints on the learner. However, I would recommend an Arduino based kit
+instead.
