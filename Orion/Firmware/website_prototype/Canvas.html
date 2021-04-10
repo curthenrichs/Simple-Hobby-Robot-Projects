@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Canvas Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<script>
+
+const CIRCLE_SIZE = 25;
+const CIRCLE_COLOR = "#ff0000";
+
+function clickDraw(e) {
+  var canvas = document.getElementById("canvas");
+  var context = canvas.getContext("2d");
+  var boundingRectangle = canvas.getBoundingClientRect();
+
+  var x = e.clientX - boundingRectangle.left;
+  var y = e.clientY - boundingRectangle.top;
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  context.fillStyle = CIRCLE_COLOR;
+  context.beginPath();
+  context.arc(x, y, CIRCLE_SIZE, 0, 2 * Math.PI);
+  context.fill();
+}
+
+function stopDraw(){
+  var canvas = document.getElementById("canvas");
+  var context = canvas.getContext("2d");
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = CIRCLE_COLOR;
+  context.beginPath();
+  context.arc(canvas.width/2, canvas.height/2, CIRCLE_SIZE, 0, 2 * Math.PI);
+  context.fill();
+}
+
+</script>
+<style>
+
+#canvas {
+  border:1px solid #000000;
+  margin: 1px;
+  cursor: crosshair;
+}
+
+</style>
+</head>
+<body>
+<center width="100%">
+<h1>Canvas Test</h1>
+<button type="button" id="estop" onclick="stop()">STOP</button>
+<canvas id="canvas" width="300" height="300"></canvas>
+<script>
+  var canvas = document.getElementById('canvas');
+  canvas.addEventListener('pointerup',clickDraw,event);
+  stopDraw();
+</script>
+</center>
+</body>
+</html>

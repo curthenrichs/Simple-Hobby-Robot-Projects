@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ORION Controller</title>
+<meta name=\"viewport\" content=\"width=device-width, initial-scale=0.9, maximum-scale=0.9, user-scalable=0\">
+<script>
+
+const MAX_DAMPING_VALUE = 1.0;
+const MIN_DAMPING_VALUE = 0.0;
+const DEFAULT_DAMPING_VALUE = 0.5;
+const CIRCLE_SIZE = 25;
+const CIRCLE_COLOR = '#ff0000';
+
+var socket = new WebSocket('ws://192.168.0.1:81',['arduino']);
+socket.onopen = function () {
+  var obj = {'connected': new Date()};
+  var str = JSON.stringify(obj);
+  socket.send(str);
+  console.log(str);
+};
+socket.onerror = function (error) {
+  console.log('WebSocket Error ', error);
+};
+socket.onmessage = function (e) {
+  console.log('Server: ', e.data);
+};
+socket.onclose = function () {
+  console.log('Websocket connection closed');
+};
+
+function clickDraw(e) {
+  var canvas = document.getElementById('joystick');
+  var context = canvas.getContext('2d');
+  var boundingRectangle = canvas.getBoundingClientRect();
+
+  var x = e.clientX - boundingRectangle.left;
+  var y = e.clientY - boundingRectangle.top;
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  context.fillStyle = CIRCLE_COLOR;
+  context.beginPath();
+  context.arc(x, y, CIRCLE_SIZE, 0, 2 * Math.PI);
+  context.fill();
+}
+
+function stopDraw(){
+  var canvas = document.getElementById('joystick');
+  var context = canvas.getContext('2d');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = CIRCLE_COLOR;
+  context.beginPath();
+  context.arc(canvas.width/2, canvas.height/2, CIRCLE_SIZE, 0, 2 * Math.PI);
+  context.fill();
+}
+
+function joystickMove(event){
+  clickDraw(event);
+
+  // get raw axis information
+  var x = event.clientX - joystick.getBoundingClientRect().left - 150;
+  x =  -1 * Math.min(Math.max(x,-100),100); //clamp
+  var y = -1 * (event.clientY - joystick.getBoundingClientRect().top - 150);
+  y = Math.min(Math.max(y,-100),100); //clamp
+
+  // scale by user defined damping
+  var dampingStr = document.getElementById('damping').value;
+  var dampingNum = parseFloat(dampingStr);
+  if(isNaN(dampingNum)){
+    dampingNum = 0;
+  }
+  x = x * dampingNum;
+  y = y * dampingNum;
+
+  //send JSON message
+  var obj = {'x':x, 'y':y};
+  var str = JSON.stringify(obj);
+  socket.send(str);
+  console.log(str);
+  var pointStr = 'X : ' + x.toFixed(2);
+      pointStr = pointStr + ', Y : ' + y.toFixed(2);
+  document.getElementById('joystickCurrentPoint').innerHTML = pointStr;
+}
+
+function joystickStop(){
+  stopDraw();
+
+  var obj = {'x':0, 'y':0};
+  var str = JSON.stringify(obj);
+  socket.send(str);
+  console.log(str);
+  var pointStr = 'X : 0.00';
+      pointStr = pointStr + ', Y : 0.00';
+  document.getElementById('joystickCurrentPoint').innerHTML = pointStr;
+}
+
+function dampingValidate(){
+  var dampingStr = document.getElementById('damping').value;
+  var dampingNum = parseFloat(dampingStr);
+  //if out of bound then set to default
+  if(isNaN(dampingNum)){
+    document.getElementById('damping').value = DEFAULT_DAMPING_VALUE;
+  }else if(dampingNum > MAX_DAMPING_VALUE){
+    document.getElementById('damping').value = MAX_DAMPING_VALUE;
+  }else if(dampingNum < MIN_DAMPING_VALUE){
+    document.getElementById('damping').value = MIN_DAMPING_VALUE;
+  }
+}
+
+</script>
+<style>
+#joystick-container {
+  border: solid 1px #000;
+  display: inline-block;
+}
+#joystick {
+  margin: 1px;
+  cursor: crosshair;
+}
+#estop {
+  width: 350px;
+}
+#damping {
+  text-align:right;
+}
+
+</style>
+</head>
+<body>
+<center width="100%">
+<h1>ORION Controller</h1>
+<button type="button" id="estop" onclick="joystickStop()">STOP</button>
+<p></p>
+<div id="joystick-container">
+<canvas id="joystick" width="300" height="300"></canvas>
+</div>
+<script>
+  var joystick = document.getElementById('joystick');
+  joystick.addEventListener('pointerup',joystickMove,event);
+  stopDraw();
+</script>
+<p id="joystickCurrentPoint">X : 0.00, Y : 0.00</p>
+<p>Input Scaler [0:1]  <input type="text" name="damping" id="damping"
+   value="0.5" onchange="dampingValidate()"></p>
+</center>
+</body>
+</html>
