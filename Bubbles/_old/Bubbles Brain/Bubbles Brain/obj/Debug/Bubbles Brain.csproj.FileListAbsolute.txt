@@ -1,0 +1,28 @@
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\Bubbles Brain.exe.config
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\Bubbles Brain.exe
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\Bubbles Brain.pdb
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Controls.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Imaging.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Imaging.Formats.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Imaging.IPPrototyper.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Math.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Video.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Vision.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Controls.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Imaging.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Imaging.Formats.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Math.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Video.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Vision.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\obj\Debug\Bubbles Brain.csprojResolveAssemblyReference.cache
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\obj\Debug\Bubbles_Brain.Form1.resources
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\obj\Debug\Bubbles_Brain.Properties.Resources.resources
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\obj\Debug\Bubbles Brain.csproj.GenerateResource.Cache
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\obj\Debug\Bubbles Brain.exe
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\obj\Debug\Bubbles Brain.pdb
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\obj\Debug\Bubbles_Brain.Form2.resources
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Video.DirectShow.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\bin\Debug\AForge.Video.DirectShow.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Brain\Bubbles Brain\obj\Debug\Bubbles_Brain.Form3.resources

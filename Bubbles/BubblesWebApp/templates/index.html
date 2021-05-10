@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bubbles Control Center</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+    <script type="text/javascript" src="{{ url_for('static', filename='robotcontrol.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='commport.js')}}"></script>
+  </head>
+  <body>
+  <center>
+    <h1>Bubbles Control Center</h1>
+    <hr>
+    <table class="layout_table">
+      <tr>
+        <td width = "60%">
+          <h3>Comm:</h3>
+        </td>
+        <td width="40%">
+          <h3>LEDs:</h3>
+        </td>
+      </tr>
+      <tr>
+        <!-- Comm port list and connection -->
+        <td width="80%" valign="top">
+          <table class="layout_table" valign="top">
+            <tr valign="top">
+              <td valign="top">
+                <div class="portselect">
+                  <button onclick="getPortList();" class="dropbtn">Port</button>
+                  <div id="myDropdown" class="portselect-content">
+                    <!--Filled With javascript-->
+                  </div>
+                </div>
+                <input type="text" value="-none-" readonly id="portname" class="portname">
+                <div class="clearfix"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <!-- For future -->
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <!-- For future -->
+              </td>
+            </tr>
+          </table>
+
+        </td>
+        <!-- LED Colors -->
+        <td width="20%" valign="top">
+          <table class="layout_table" valign="top">
+            <tr>
+              <td width="7%" class="led_content">
+                <p align="left">R:</p>
+              </td>
+              <td width="23%" class="led_content">
+                <input type="text" value="255" id="r_channel" maxlength="4" size="4" onchange="changeColor();">
+              </td>
+              <td width="70%" class="led_content">
+                <button onclick="setColor();" align="left">Update</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="led_content">
+                <p align="left">G:</p>
+              </td>
+              <td class="led_content">
+                <input type="text" value="255" id="g_channel" maxlength="4" size="4" onchange="changeColor();">
+              </td>
+              <td class="led_content">
+                <input type="text" align="left" value="" id="rgb_selected" maxlength="4" size="4" readonly>
+              </td>
+            </tr>
+            <tr>
+              <td class="led_content">
+                <p align="left">B:</p>
+              </td>
+              <td class="led_content">
+                <input type="text" value="255" id="b_channel" maxlength="4" size="4" onchange="changeColor();">
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </center>
+  <left>
+    <h3>Mode:</h1>
+    <center>
+      <!-- Mode Tabs -->
+      <div class="tab">
+        <button id="off_btn" class="tablinks" onclick="openMode(event,'off');">Off</button>
+        <button id="auton_btn" class="tablinks" onclick="openMode(event,'auton');">Auton</button>
+        <button id="manual_btn" class="tablinks" onclick="openMode(event,'manual');">Manaul</button>
+      </div>
+
+      <!-- Off Tab will display information about Bubbles -->
+      <div id="off" class="tabcontent">
+        <p>Bubbles is in off state. Meaning he will use hardware level AI.</p>
+      </div>
+
+      <!-- Auton Tab will display information about the autonomous algorithm -->
+      <div id="auton" class="tabcontent">
+        <p>Bubbles is in autonomous state. Meaing he will use embedded level AI.</p>
+      </div>
+
+      <!-- Manual Tab will expose buttons to control the movement of Bubbles -->
+      <div id="manual" class="tabcontent">
+        <table class="buttons" cellpadding="15">
+          <tr>
+            <td></td>
+            <td>
+              <button type="button" id="forward_btn"
+              onclick="setManualCommand('forward');">Forward</button>
+            </td>
+            <td></td>
+            <td>
+              <button type="button" id="neck_up_btn"
+              onclick="setNeckCommand('up');">Head Up</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button type="button" id="left_btn"
+              onclick="setManualCommand('left');">Left</button>
+            </td>
+            <td>
+              <button type="button" id="stop_btn"
+              onclick="setManualCommand('stop');">STOP</button>
+            </td>
+            <td>
+              <button type="button" id="right_btn"
+              onclick="setManualCommand('right');">Right</button>
+            </td>
+            <td>
+              <button type="button" id="neck_home_btn"
+              onclick="setNeckCommand('home');">Head Home</button>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <button type="button" id="backward_btn"
+              onclick="setManualCommand('backward');">Backward</button>
+            </td>
+            <td></td>
+            <td>
+              <button type="button" id="neck_down_btn"
+              onclick="setNeckCommand('down');">Head Down</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </center>
+  </left>
+
+  <!-- End of file script to call actions on elements -->
+  <script type="text/javascript">
+
+  // Get off button and "click" it
+  document.getElementById("off_btn").click();
+
+  // Assign keyboard handler
+  document.onkeypress = keypressed;
+
+  </script>
+  </body>
+</html>

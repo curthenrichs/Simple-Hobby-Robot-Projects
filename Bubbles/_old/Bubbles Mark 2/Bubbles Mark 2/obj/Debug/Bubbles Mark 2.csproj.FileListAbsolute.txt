@@ -1,0 +1,28 @@
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\Bubbles Mark 2.exe.config
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\Bubbles Mark 2.exe
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\Bubbles Mark 2.pdb
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Controls.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Imaging.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Imaging.Formats.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Imaging.IPPrototyper.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Math.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Video.DirectShow.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Video.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Vision.dll
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Controls.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Imaging.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Imaging.Formats.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Math.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Video.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Video.DirectShow.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\bin\Debug\AForge.Vision.xml
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\obj\Debug\Bubbles Mark 2.csprojResolveAssemblyReference.cache
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\obj\Debug\Bubbles_Mark_2.Properties.Resources.resources
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\obj\Debug\Bubbles Mark 2.csproj.GenerateResource.Cache
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\obj\Debug\Bubbles Mark 2.exe
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\obj\Debug\Bubbles Mark 2.pdb
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\obj\Debug\Bubbles_Mark_2.CommandList.resources
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\obj\Debug\Bubbles_Mark_2.MainGUI.resources
+d:\mydocs\documents\visual studio 2013\Projects\Bubbles Mark 2\Bubbles Mark 2\obj\Debug\Bubbles_Mark_2.VisionGUI.resources

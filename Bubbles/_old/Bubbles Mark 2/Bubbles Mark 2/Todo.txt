@@ -1,0 +1,21 @@
+﻿This is a list of things to accomplish
+
+1) finish refactoring all of mark1 into mark2
+	 a)write vision thread and gui
+
+2) implement full state machine functions
+	 a)write high and low level auton code for when its going (high level is tracking)
+	 b)merge vision and speech with control system
+	 c)merge emotional control with system
+	 d)write speech recognition system to recognize commands
+	 e)write emotional system
+	 f)write a button that opens up the arduino ide with the bubbles firmware
+	 g)create remote client system so i can acess over internet
+	 h)write method for serail output and input
+
+3) finish hardware
+	 b)add motor control circuit
+	 c)add camera & microphone
+	 d)test equipment with the software
+	 e)add mood leds to eyes
+	 f)redesign battery system to be rechargeable and for entire robot

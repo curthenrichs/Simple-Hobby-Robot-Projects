@@ -1,0 +1,111 @@
+/* Style the tab */
+div.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+div.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+div.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+div.tab button.active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+/* Style the control button table */
+.buttons {
+  border-collapse: collapse;
+  width: 350px;
+  height: 175px;
+}
+
+/* Style the buttons inside the table */
+.buttons button {
+  width: 100px;
+  height: 50px;
+}
+
+/* Format the layout tables to take advantage of space */
+.layout_table {
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0px, 0px;
+  width: 100%;
+}
+
+/* Dropdown Button */
+.dropbtn {
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.portselect {
+    display: inline-block;
+    float: left;
+    padding-right: 20px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.portselect-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 100px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.portselect-content p {
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.portselect-content p:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content
+   container when the user clicks on the dropdown button) */
+.show {display:block;}
+
+/* Allows for elements to be on same line */
+.portname {
+  float: left;
+  font-size: 16px;
+}
+
+/* Stops elements from being on same line */
+.clearfix {
+    clear:both
+}
+
+/* Defines the padding rules for elements of LED module */
+.led_content {
+  font-size: 16px;
+  margin: 0;
+  padding: 0px, 0px;
+}
