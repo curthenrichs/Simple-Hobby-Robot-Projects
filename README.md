@@ -5,6 +5,7 @@ Some of the smaller / earlier projects in hobby robotics.
 - [Lego-Mindstorms](./Lego-Mindstorms/README.md)
 - [PhoBo](./PhoBo/README.md)
 - [SpinBot](./SpinBot/README.md)
+- [Bubbles ~ Arduino Robot](./Bubbles/README.md)
 
 
 This codebase is not well documented or maintained. I am only keeping it around
