@@ -59,7 +59,8 @@ Hardware::Hardware(void) : motorController(MOTOR_CONTROLLER_DIRECTION_PIN,
                                            MOTOR_CONTROLLER_BRAKE_PIN,
                                            MOTOR_CONTROLLER_PWM_PIN),
                            ultrasonic(ULTRASONIC_PIN),
-                           encoder(ENCODER_PIN)
+                           encoder(ENCODER_PIN),
+                           display()
 {
   speedController.isCommandedToMove = false;
   speedController.appearsStuckCount = 0;
@@ -100,6 +101,22 @@ MotorController& Hardware::getMotorController(void){
 }
 
 /**
+ * Gets reference to display
+ * @return reference to Display object
+ */
+Display& Hardware::getDisplay(void){
+  return display; 
+}
+
+/**
+ * Get reference to accelerometer
+ * @return reference to Accelerometer object
+ */
+Accelerometer& Hardware::getAccelerometer(void){
+  return accelerometer;
+}
+
+/**
  * Sets up interface with hardware, as constructor is called before hardware
  * in enumerated, thus an error occurs.
  */
@@ -111,7 +128,9 @@ void Hardware::begin(void){
   encoder.init();
 
   ultrasonic.begin();
+  accelerometer.begin();
   motorController.begin();
+  display.begin();
 }
 
 /**
@@ -119,8 +138,9 @@ void Hardware::begin(void){
  * events.
  */
 void Hardware::update(void){
-
   encoder.update();
+
+  accelerometer.update();
 
   if (speedController.updateTimer >= UPDATE_SPEED_CONTROLLER_TIME) {
     speedController.updateTimer -= UPDATE_SPEED_CONTROLLER_TIME;
@@ -258,7 +278,7 @@ void Hardware::_updateSpeedController(void) {
   }
 
   // compute speed offset
-  if (bin == SPEED_SLOW) {
+  if (bin == SPEED_SLOW || bin == SPEED_STUCK) {
     speedController.speedOffset += 10;
     if (speedController.speedOffset >= 50) {
       speedController.speedOffset = 50;

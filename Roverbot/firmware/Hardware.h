@@ -14,12 +14,16 @@
 //                                Libraries
 //==============================================================================
 
-#include <Servo.h>
 #include "HardwareConfig.h"
 #include "MotorController.h"
 #include "UltrasonicSensor.h"
-#include <elapsedMillis.h>
+#include "Accelerometer.h"
 #include "Encoder.h"
+#include "Display.h"
+
+#include <Servo.h>
+#include <elapsedMillis.h>
+#include <Wire.h>
 
 //==============================================================================
 //                         Data Structure Declaration
@@ -53,6 +57,8 @@ class Hardware {
     Servo steering;                     //! Reference to steer motor
     SpeedController_t speedController;  //! Reference to speed controller
     Encoder encoder;                    //! Reference to speed sensor
+    Display display;                    //! Reference to OLED display
+    Accelerometer accelerometer;        //! Reference to Accelerometer
 
     /**
      * Computes new state of the speed controller on timing event
@@ -86,6 +92,16 @@ class Hardware {
      * @return reference to MotorController object
      */
     MotorController& getMotorController(void);
+    /**
+     * Gets reference to display
+     * @return reference to Display object
+     */
+    Display& getDisplay(void);
+    /**
+     * Get reference to accelerometer
+     * @return reference to Accelerometer object
+     */
+    Accelerometer& getAccelerometer(void);
     /**
      * Sets up interface with hardware, as constructor is called before hardware
      * in enumerated, thus an error occurs.

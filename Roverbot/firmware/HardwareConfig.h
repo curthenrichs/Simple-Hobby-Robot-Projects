@@ -34,11 +34,21 @@
 #define DONT_USE_A0_PIN                     A0
 #define DONT_USE_A1_PIN                     A1
 
+#define I2C_SDA_PIN                         A4
+#define I2C_SCL_PIN                         A5
+
 //==============================================================================
 //                              Debug Serial
 //==============================================================================
 
 #define DEBUG_SERIAL                        Serial
 #define DEBUG_SERIAL_BAUD                   9600
+
+//==============================================================================
+//                            I2C Address Space
+//==============================================================================
+
+#define I2C_DISPLAY_ADDRESS                 0x3C 
+#define I2C_ACCEROMETER_ADDRESS             0x18
 
 #endif
