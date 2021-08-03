@@ -27,21 +27,23 @@
 class UltrasonicSensor {
 
 	private:
-		// pin connected to sensor IO line
-		byte _pin;
+		byte _triggerPin;			//! pin connected to sensor trigger line
+    byte _echoPin;        //! pin conncted to sensor echo line
+		long _cachedRead;	    //! last distance reading store
 
 	public:
 		/**
 		 * Default constructor uses pin parameter to map structure to physical
 		 * device.
-		 * @param pin is sensor IO pin on ultrasonic sensor.
+		 * @param triggerPin is sensor trigger pin on ultrasonic sensor.
+     * @param echoPin is sensor echo pin on ultrasonic sensor
 		 */
-		UltrasonicSensor(byte pin);
+		UltrasonicSensor(byte triggerPin, byte echoPin);
 		/**
-     * Sets up interface with hardware, as constructor is called before hardware
-     * in enumerated, thus an error occurs.
-     */
-    void begin(void);
+		 * Sets up interface with hardware, as constructor is called before hardware
+		 * in enumerated, thus an error occurs.
+		 */
+		void begin(void);
 		/**
 		 * Gets the distance to closest object from the sensor. If distance to
 		 * object is a really large value then this is effectively infinity due
@@ -49,6 +51,10 @@ class UltrasonicSensor {
 		 * @return long with a distance in inches
 		 */
 		long getDistance(void);
+		/**
+		 * @return gets the last distance read from this sensor.
+		 */
+		long getCachedDistance(void);
 };
 
 #endif

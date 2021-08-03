@@ -20,16 +20,23 @@
 //                            Class Implementation
 //==============================================================================
 
+/**
+ * Constructor creates a new sensor
+ */
 Accelerometer::Accelerometer(void) : sensor() {
-  x = 0;
-  y = 0;
-  z = 0;
+  x =  y = z = 0;
 }
 
+/**
+     * Starts I2C comms
+     */
 void Accelerometer::begin(void) {
   sensor.begin(I2C_ACCEROMETER_ADDRESS);
 }
 
+/**
+ * Queries the I2C device for latest state
+ */
 void Accelerometer::update(void) {
   sensors_event_t event;
   sensor.getEvent(&event);
@@ -39,14 +46,23 @@ void Accelerometer::update(void) {
   z = event.acceleration.z;
 }
 
+/**
+ * @return Gets buffered x axis value
+ */
 float Accelerometer::getX(void) {
   return x;
 }
 
+/**
+ * @return Gets buffered y axis value
+ */
 float Accelerometer::getY(void) {
   return y;
 }
 
+/**
+ * @return Gets buffered z axis value
+ */
 float Accelerometer::getZ(void) {
   return z;
 }

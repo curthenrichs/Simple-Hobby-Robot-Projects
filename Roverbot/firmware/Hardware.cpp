@@ -12,6 +12,7 @@
 //==============================================================================
 
 #include "Hardware.h"
+
 #include <math.h>
 
 //==============================================================================
@@ -33,7 +34,7 @@
 #define MOTOR_FORWARD_SPEED                 160 //pwm
 #define MOTOR_FORWARD_TURN_SPEED            200 //pwm
 
-// Different categories of speed used to classiy accelerometer output
+// Different categories of speed used to classiy encoder output
 typedef enum SpeedBins {
   SPEED_STUCK,      //! Speed is approximatly zero and should not be
   SPEED_SLOW,       //! Speed could be higher
@@ -45,6 +46,9 @@ typedef enum SpeedBins {
 // Speed controller update constants
 #define STUCK_COUNT_THRESHOLD               5
 #define UPDATE_SPEED_CONTROLLER_TIME        200 //ms
+
+#define DISPLAY_REFRESH_TIME                500 //ms
+#define DISPLAY_ROLLOVER_TIME               5000 //ms
 
 //==============================================================================
 //                            Class Implementation
@@ -58,7 +62,8 @@ typedef enum SpeedBins {
 Hardware::Hardware(void) : motorController(MOTOR_CONTROLLER_DIRECTION_PIN,
                                            MOTOR_CONTROLLER_BRAKE_PIN,
                                            MOTOR_CONTROLLER_PWM_PIN),
-                           ultrasonic(ULTRASONIC_PIN),
+                           ultrasonic(ULTRASONIC_TRIGGER_PIN,
+                                      ULTRASONIC_ECHO_PIN),
                            encoder(ENCODER_PIN),
                            display()
 {
@@ -66,6 +71,9 @@ Hardware::Hardware(void) : motorController(MOTOR_CONTROLLER_DIRECTION_PIN,
   speedController.appearsStuckCount = 0;
   speedController.updateTimer = 0;
   speedController.speedOffset = 0;
+  _displayFrozen = false;
+  _previouslyNotPressed = false;
+  _displayPageIndex = 0;
 }
 
 /**
@@ -127,6 +135,8 @@ void Hardware::begin(void){
   steering.write(STEER_SERVO_CENTER);
   encoder.init();
 
+  pinMode(DISPLAY_BUTTON_PIN,INPUT);
+
   ultrasonic.begin();
   accelerometer.begin();
   motorController.begin();
@@ -139,13 +149,11 @@ void Hardware::begin(void){
  */
 void Hardware::update(void){
   encoder.update();
-
   accelerometer.update();
 
-  if (speedController.updateTimer >= UPDATE_SPEED_CONTROLLER_TIME) {
-    speedController.updateTimer -= UPDATE_SPEED_CONTROLLER_TIME;
-    _updateSpeedController();
-  }
+  _updateSpeedController();
+  _updateButton();
+  _updateDisplay();
 }
 
 /**
@@ -239,56 +247,121 @@ bool Hardware::isStuck(void) {
 }
 
 /**
+ * @param state sets the internal state code cache (used for display) 
+ */
+void Hardware::setAutonStateCode(byte state) {
+  _autonStateCode = state;
+}
+
+/**
  * Computes new state of the speed controller on timing event
  */
 void Hardware::_updateSpeedController(void) {
+  if (speedController.updateTimer >= UPDATE_SPEED_CONTROLLER_TIME) {
+    speedController.updateTimer -= UPDATE_SPEED_CONTROLLER_TIME;
 
-  // classify
-  float speed = encoder.getSpeed();
-  SpeedBins_t bin;
-  if (speedController.isCommandedToMove) {
-    if (speed <= 0.5) {
-      bin = SPEED_STUCK;
-    } else if (speed <= 5) {
-      bin = SPEED_SLOW;
-    } else if (speed <= 8) {
-      bin = SPEED_NORMAL;
+    // classify
+    float speed = encoder.getSpeed();
+    SpeedBins_t bin;
+    if (speedController.isCommandedToMove) {
+      if (speed <= 0.5) {
+        bin = SPEED_STUCK;
+      } else if (speed <= 5) {
+        bin = SPEED_SLOW;
+      } else if (speed <= 8) {
+        bin = SPEED_NORMAL;
+      } else {
+        bin = SPEED_HIGH;
+      }
     } else {
-      bin = SPEED_HIGH;
+      if (speed > 0.5) {
+        bin = SPEED_INVALID;
+      } else {
+        bin = SPEED_NORMAL;
+      }
     }
-  } else {
-    if (speed > 0.5) {
-      bin = SPEED_INVALID;
+
+    // compute stuck
+    if (bin == SPEED_STUCK) {
+      speedController.appearsStuckCount += 1;
+      if (speedController.appearsStuckCount > STUCK_COUNT_THRESHOLD) {
+        speedController.appearsStuckCount = STUCK_COUNT_THRESHOLD;
+      }
     } else {
-      bin = SPEED_NORMAL;
+      speedController.appearsStuckCount -= 1;
+      if (speedController.appearsStuckCount < 0) {
+        speedController.appearsStuckCount = 0;
+      }
+    }
+
+    // compute speed offset
+    if (bin == SPEED_SLOW || bin == SPEED_STUCK) {
+      speedController.speedOffset += 10;
+      if (speedController.speedOffset >= 50) {
+        speedController.speedOffset = 50;
+      }
+    } else if (bin == SPEED_HIGH) {
+      speedController.speedOffset -= 10;
+      if (speedController.speedOffset <= -10) {
+        speedController.speedOffset = -10;
+      }
+    } else if (bin == SPEED_INVALID) {
+      speedController.speedOffset = 0;
+    }
+  }
+}
+
+/**
+ * Checks current display frozen button toggle
+ */
+void Hardware::_updateButton(void) {
+  byte pressed = !digitalRead(DISPLAY_BUTTON_PIN);
+  if (pressed && !_previouslyNotPressed) {
+    _displayFrozen = !_displayFrozen;
+    _previouslyNotPressed = true;
+  } else if (!pressed && _previouslyNotPressed) {
+    _previouslyNotPressed = false;
+  }
+}
+
+/**
+ * Updates display page contents and rolls page if not frozen
+ */
+void Hardware::_updateDisplay(void) {
+
+  if (_lastRefreshTime >= DISPLAY_REFRESH_TIME) {
+    _lastRefreshTime = 0;
+
+    switch (_displayPageIndex) {
+      case 0:
+        display.pageRender_auton(
+          _autonStateCode
+        );
+        break;
+      case 1:
+        display.pageRender_sensors(
+          encoder.getSpeed(),
+          ultrasonic.getCachedDistance(),
+          accelerometer.getX(),
+          accelerometer.getY()
+        );
+        break;
+      case 2:
+        display.pageRender_motors(
+          head.read(),
+          steering.read(),
+          motorController.getSpeed() * motorController.getDirection()
+        );
+        break;
     }
   }
 
-  // compute stuck
-  if (bin == SPEED_STUCK) {
-    speedController.appearsStuckCount += 1;
-    if (speedController.appearsStuckCount > STUCK_COUNT_THRESHOLD) {
-      speedController.appearsStuckCount = STUCK_COUNT_THRESHOLD;
+  if (!_displayFrozen && _lastRolloverTime >= DISPLAY_ROLLOVER_TIME) {
+    _lastRolloverTime = 0;
+    
+    _displayPageIndex++;
+    if (_displayPageIndex >= 2) {
+      _displayPageIndex = 0;
     }
-  } else {
-    speedController.appearsStuckCount -= 1;
-    if (speedController.appearsStuckCount < 0) {
-      speedController.appearsStuckCount = 0;
-    }
-  }
-
-  // compute speed offset
-  if (bin == SPEED_SLOW || bin == SPEED_STUCK) {
-    speedController.speedOffset += 10;
-    if (speedController.speedOffset >= 50) {
-      speedController.speedOffset = 50;
-    }
-  } else if (bin == SPEED_HIGH) {
-    speedController.speedOffset -= 10;
-    if (speedController.speedOffset <= -10) {
-      speedController.speedOffset = -10;
-    }
-  } else if (bin == SPEED_INVALID) {
-    speedController.speedOffset = 0;
   }
 }

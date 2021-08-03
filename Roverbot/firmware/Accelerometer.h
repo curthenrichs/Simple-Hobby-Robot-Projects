@@ -25,21 +25,33 @@
 class Accelerometer {
 
   private:
-    Adafruit_LIS3DH sensor;
-    float x, y, z;
+    Adafruit_LIS3DH sensor;   //! internal I2C sensor interface
+    float x, y, z;            //! cached sensor readings
 
   public:
-
+    /**
+     * Constructor creates a new sensor
+     */
     Accelerometer(void);
-
+    /**
+     * Starts I2C comms
+     */
     void begin(void);
-
+    /**
+     * Queries the I2C device for latest state
+     */
     void update(void);
-
+    /**
+     * @return Gets buffered x axis value
+     */
     float getX(void);
-
+    /**
+     * @return Gets buffered y axis value
+     */
     float getY(void);
-
+    /**
+     * @return Gets buffered z axis value
+     */
     float getZ(void);
 };
 

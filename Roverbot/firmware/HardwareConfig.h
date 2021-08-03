@@ -23,17 +23,18 @@
 
 #define HW_SERIAL_RX_PIN                    0
 #define HW_SERIAL_TX_PIN                    1
-#define ULTRASONIC_PIN                      7
+#define DISPLAY_BUTTON_PIN                  2
+#define MOTOR_CONTROLLER_PWM_PIN            3
 #define STEER_SERVO_PIN                     5
 #define HEAD_SERVO_PIN                      6
+#define ULTRASONIC_TRIGGER_PIN              7
+#define ULTRASONIC_ECHO_PIN                 8
 #define MOTOR_CONTROLLER_BRAKE_PIN          9
 #define MOTOR_CONTROLLER_DIRECTION_PIN      12
-#define MOTOR_CONTROLLER_PWM_PIN            3
-#define ENCODER_PIN                         A3
 
 #define DONT_USE_A0_PIN                     A0
 #define DONT_USE_A1_PIN                     A1
-
+#define ENCODER_PIN                         A3
 #define I2C_SDA_PIN                         A4
 #define I2C_SCL_PIN                         A5
 

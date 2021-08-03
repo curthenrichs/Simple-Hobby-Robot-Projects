@@ -37,7 +37,7 @@ typedef struct SpeedController {
   bool isCommandedToMove;       //! Robot should be moving
   int appearsStuckCount;        //! Number of times speed was classified as stuck
   elapsedMillis updateTimer;    //! Time event to update controller state
-  int8_t speedOffset;           //! Offset on the drive motor PWM
+  int speedOffset;              //! Offset on the drive motor PWM
 } SpeedController_t;
 
 //==============================================================================
@@ -59,11 +59,25 @@ class Hardware {
     Encoder encoder;                    //! Reference to speed sensor
     Display display;                    //! Reference to OLED display
     Accelerometer accelerometer;        //! Reference to Accelerometer
+    bool _previouslyNotPressed;         //! Display button hysteresis
+    bool _displayFrozen;                //! Display frozen or scrolling
+    byte _displayPageIndex;             //! Display page index (rolling unless frozen)
+    elapsedMillis _lastRefreshTime;     //! Last time display refreshed
+    elapsedMillis _lastRolloverTime;    //! Last time display rolled over
+    byte _autonStateCode;               //! Set state for diplay in page
 
     /**
      * Computes new state of the speed controller on timing event
      */
     void _updateSpeedController(void);
+    /**
+     * Checks current display frozen button toggle
+     */
+    void _updateButton(void);
+    /**
+     * Updates display page contents and rolls page if not frozen
+     */
+    void _updateDisplay(void);
 
   public:
     /**
@@ -156,6 +170,10 @@ class Hardware {
      * @return true if the robot thinks it is stuck else false
      */
     bool isStuck(void);
+    /**
+     * @param state sets the internal state code cache (used for display) 
+     */
+    void setAutonStateCode(byte state);
 };
 
 #endif

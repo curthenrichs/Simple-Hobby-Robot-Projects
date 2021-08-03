@@ -50,11 +50,11 @@ class Display {
     /**
      * Renders page - Sensors
      * @param encoderSpeed is current speed from encoder
-     * @param distance is last read distance from ultrasonic
+     * @param distance is current distance cached in ultrasonic
      * @param accX is current acceleration in X direction
      * @param accY is current acceleration in Y direction
      */
-    void pageRender_sensors(int encoderSpeed, int distance, int accX, int accY);
+    void Display::pageRender_sensors(float encoderSpeed, float distance, float accX, float accY);
     /**
      * Renders page - Motors
      * @param headServo is current value of servo motor

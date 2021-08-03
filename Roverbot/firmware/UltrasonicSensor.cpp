@@ -23,8 +23,10 @@
  * device.
  * @param pin is sensor IO pin on ultrasonic sensor.
  */
-UltrasonicSensor::UltrasonicSensor(byte pin){
-	_pin = pin;
+UltrasonicSensor::UltrasonicSensor(byte triggerPin, byte echoPin){
+	_triggerPin = triggerPin;
+  _echoPin = echoPin;
+	_cachedRead = 0;
 }
 
 /**
@@ -32,8 +34,8 @@ UltrasonicSensor::UltrasonicSensor(byte pin){
  * in enumerated, thus an error occurs.
  */
 void UltrasonicSensor::begin(void){
-  pinMode(_pin, OUTPUT);
-  digitalWrite(_pin, LOW);
+  pinMode(_echoPin,INPUT);
+  pinMode(_triggerPin, OUTPUT);
 }
 
 /**
@@ -43,26 +45,23 @@ void UltrasonicSensor::begin(void){
  * @return long with a distance in inches
  */
 long UltrasonicSensor::getDistance(void){
-	//these are the variabels for the duration of the high pulse and the distance
-	// away an object is
-	long duration, inches;
+ digitalWrite(_triggerPin, LOW);
+ delayMicroseconds(2);
+ digitalWrite(_triggerPin, HIGH);
+ delayMicroseconds(10);
+ digitalWrite(_triggerPin, LOW);
 
-	//trigger the ping with a two mircosecond high pulse then drop low before
-	// switching to input
-	pinMode(_pin, OUTPUT);
-	digitalWrite(_pin, LOW);
-	delayMicroseconds(2);
-	digitalWrite(_pin, HIGH);
-	delayMicroseconds(5);
-	digitalWrite(_pin, LOW);
+ long duration = pulseIn(_echoPin, HIGH);
+ _cachedRead = duration / 74 / 2;
 
-	//switch to input then wait for the trigger
-	pinMode(_pin, INPUT);
-	duration = pulseIn(_pin, HIGH);
+  Serial.println(_cachedRead);
+ 
+ return _cachedRead;
+}
 
-	//convert to inches
-	inches = duration/74/2;
-
-	//return the value to the program
-	return inches;
+/**
+ * @return gets the last distance read from this sensor.
+ */
+long UltrasonicSensor::getCachedDistance(void) {
+	return _cachedRead;
 }

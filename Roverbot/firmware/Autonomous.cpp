@@ -14,6 +14,7 @@
 //==============================================================================
 
 #include "Autonomous.h"
+
 #include "HardwareConfig.h"
 #include <elapsedMillis.h>
 
@@ -41,7 +42,6 @@ typedef enum TravelState {
   ERROR
 } TravelState_e;
 
-
 /**
  * Minimum distance before switching from forward to turning
  */
@@ -64,6 +64,18 @@ typedef enum TravelState {
 #define DELAY_FORWARD             200
 #define DELAY_BACKWARD            200
 
+// Maximum allowed delay for stuck states
+#define FORWARD_MAX_STUCK_DELAY   5
+#define BACKWARD_MAX_STUCK_DELAY  5
+
+// Maxium turn count before considered stuck in corner
+#define MAX_LEFT_COUNT            5
+#define MAX_RIGHT_COUNT           5
+
+//==============================================================================
+//                         Data Structure Declaration
+//==============================================================================
+
 /**
  * AI state maintainer used to handle robot stuck cases
  */
@@ -73,14 +85,6 @@ typedef struct CornerAI {
   int forwardStuckDelay = 1;    //! Increase state time on reentry
   int backwardStuckDelay = 1;   //! Increase state time on reentry
 } CornerAI_t;
-
-// Maximum allowed delay for stuck states
-#define FORWARD_MAX_STUCK_DELAY   5
-#define BACKWARD_MAX_STUCK_DELAY  5
-
-// Maxium turn count before considered stuck in corner
-#define MAX_LEFT_COUNT            5
-#define MAX_RIGHT_COUNT           5
 
 //==============================================================================
 //                             Private Members
@@ -281,6 +285,8 @@ void auto_update(Hardware& hw){
       auto_reset(); //something broke, reset state-machine
       break;
   }
+
+  hw.setAutonStateCode(_state);
 }
 
 //==============================================================================

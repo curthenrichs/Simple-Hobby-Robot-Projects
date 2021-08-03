@@ -18,7 +18,7 @@
 //                       Constants and Macro Definitions
 //==============================================================================
 
-#define OFF_PWM 										(0)	//! No signal on pin = 0ff
+#define OFF_PWM 							(0)	//! No signal on pin = 0ff
 
 //==============================================================================
 //                           Class Implementation
@@ -48,12 +48,17 @@ void MotorController::begin(void){
   digitalWrite(_dirPin,LOW);
   digitalWrite(_stopPin,LOW);
   digitalWrite(_speedPin,LOW);
+
+  _lastDirection = 0;
+  _lastSpeed = 0;
 }
 
 /**
  * Command the motor to stop moving (what ever that means)
  */
 void MotorController::stop(void) {
+	_lastSpeed = OFF_PWM;
+	_lastDirection = 0;
 	analogWrite(_speedPin,OFF_PWM);
 }
 
@@ -61,7 +66,9 @@ void MotorController::stop(void) {
  * Commands the motor in the forward direction (what ever that means)
  * @param speed is scaler PWM speed to travel at
  */
-void MotorController::forward(byte speed){
+void MotorController::forward(byte speed) {
+	_lastSpeed = speed;
+	_lastDirection = 1;
 	digitalWrite(_dirPin,LOW);
 	digitalWrite(_stopPin,LOW);
 	analogWrite(_speedPin,speed);
@@ -71,8 +78,24 @@ void MotorController::forward(byte speed){
  * Commands the motor in the reverse direction (what ever that means)
  * @param speed is scaler PWM speed to travel at
  */
-void MotorController::reverse(byte speed){
+void MotorController::reverse(byte speed) {
+	_lastSpeed = speed;
+	_lastDirection = -1;
 	digitalWrite(_dirPin,HIGH);
 	digitalWrite(_stopPin,LOW);
 	analogWrite(_speedPin,speed);
+}
+
+/**
+ * @return Gets the last speed set on the motor controller
+ */
+int MotorController::getSpeed(void) {
+	return _lastSpeed;
+}
+
+/**
+ * @return Gets the last direction set on the motor controller
+ */
+int MotorController::getDirection(void) {
+	return _lastDirection;
 }

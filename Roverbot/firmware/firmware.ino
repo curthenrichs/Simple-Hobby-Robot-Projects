@@ -29,6 +29,8 @@ static Hardware _roverHardware;         //! Roverbot
 //==============================================================================
 
 void setup(void) {
+  Serial.begin(9600);
+  
   _roverHardware.begin();
   auto_reset();
 }

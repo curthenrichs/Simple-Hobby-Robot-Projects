@@ -33,6 +33,10 @@ class MotorController{
 		byte _stopPin;
 		// Speed pin, controls the scaler speed of the motor.
 		byte _speedPin;
+		// Current speed set
+		int _lastSpeed;
+		// Current direction set
+		int _lastDirection;
 
 	public:
 		/**
@@ -44,10 +48,10 @@ class MotorController{
 		 */
 		MotorController(byte dirPin, byte stopPin, byte speedPin);
 		/**
-     * Sets up interface with hardware, as constructor is called before hardware
-     * in enumerated, thus an error occurs.
-     */
-    void begin(void);
+		 * Sets up interface with hardware, as constructor is called before hardware
+		 * in enumerated, thus an error occurs.
+		 */
+    	void begin(void);
 		/**
 		 * Command the motor to stop moving (what ever that means)
 		 */
@@ -62,6 +66,14 @@ class MotorController{
 		 * @param speed is scaler PWM speed to travel at
 		 */
 		void reverse(byte speed);
+		/**
+		 * @return Gets the last speed set on the motor controller
+		 */
+		int getSpeed(void);
+		/**
+		 * @return Gets the last direction set on the motor controller
+		 */
+		int getDirection(void);
 };
 
 #endif

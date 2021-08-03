@@ -41,6 +41,8 @@ Display::Display(void) : display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1) {
 void Display::begin(void) {
   display.begin(SSD1306_SWITCHCAPVCC, I2C_DISPLAY_ADDRESS);
   display.display();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
 }
 
 /**
@@ -55,18 +57,33 @@ void Display::clear(void) {
  * @param state is current auton state code
  */
 void Display::pageRender_auton(int state) {
-  //TODO
+  clear();
+
+  display.setCursor(0,0);
+  display.print(F("Auton:"));
+  display.println(state);
+  display.display();
 }
 
 /**
  * Renders page - Sensors
  * @param encoderSpeed is current speed from encoder
- * @param distance is last read distance from ultrasonic
+ * @param distance is current distance cached in ultrasonic
  * @param accX is current acceleration in X direction
  * @param accY is current acceleration in Y direction
  */
-void Display::pageRender_sensors(int encoderSpeed, int distance, int accX, int accY) {
-  //TODO
+void Display::pageRender_sensors(float encoderSpeed, float distance, float accX, float accY) {
+  clear();
+  display.setCursor(0,0);
+  display.print(F("Speed:"));
+  display.println(encoderSpeed);
+  display.print(F("Dist:"));
+  display.println(distance);
+  display.print(F("ACC X:"));
+  display.print(accX);
+  display.print(F(", Y:"));
+  display.println(accY);
+  display.display();
 }
 
 /**
@@ -76,5 +93,13 @@ void Display::pageRender_sensors(int encoderSpeed, int distance, int accX, int a
  * @param driveMotor is current value of drive motor (+/- is direction)
  */
 void Display::pageRender_motors(int headServo, int steerServo, int driveMotor) {
-  //TODO
+  clear();
+  display.setCursor(0,0);
+  display.print(F("Head:"));
+  display.println(headServo);
+  display.print(F("Steer:"));
+  display.println(steerServo);
+  display.print(F("Drive:"));
+  display.println(driveMotor);
+  display.display();
 }
