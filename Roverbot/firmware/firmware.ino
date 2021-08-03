@@ -37,6 +37,6 @@ void setup(void) {
 
 void loop(void) {
   _roverHardware.update();
-  auto_update(_roverHardware);
+    auto_update(_roverHardware);
   delay(1);
 }
