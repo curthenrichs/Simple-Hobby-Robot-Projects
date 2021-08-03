@@ -16,7 +16,7 @@ order of their creation (first is oldest, last is newest)
 - [Roverbot ~ Current Version](./Roverbot/README.md)
 
 ## Post-Grad
-- [Roverbot ~ In Progress Version](./Roverbot/README.md)
+- [Roverbot ~ Fixing wear & tear](./Roverbot/README.md)
 - [Bubbles ~ In Progress Version](./Bubbles/README.md)
 
 ## Note
