@@ -1,8 +1,35 @@
-# Roverbot
-I built roverbot as the next step after working with kits and building simple robots.
+# RoverBot
 
-At its base is an RC car chassis and drivetrain. I removed the electronics and replaced the steering assembly with an standard RC servo motor. To control the robot I used an Arduino Uno with a motor shield. For sensing, I attatched an ultrasonic sensor on a servo and attached a low-fidelity wheel encoder (LED + Phototransistor). The code is built around a single state-machine that produces "wall-banger" behavior.
+RoverBot is a custom Arduino-based robot built from an RC car chassis, featuring:
 
-More recently I added an OLED display to provide some state information in order to diagnose its behavior. I also added an I2C accelerometer for additional output though not doing anything behavior-wise with it. Lastly, changed the ultrasonic sensor as the old one died after moving across the country.
+- Arduino Uno with a motor shield for drivetrain control
+- Servo-based steering replacing the original turning assembly
+- Ultrasonic sensor on a servo for obstacle detection
+- Wheel encoder (LED + phototransistor) for speed measurement
+- OLED display & I2C accelerometer for diagnostics
 
-This repositiory is primarily used for archival purposes. This code is minimally being maintained. There are some not-so-great design choices and coding practices that I just don't care to fix as it "just works".
+This repository is for archival purposes. The code is minimally maintained. 
+
+Code architecture follows a state-machine-based autonomy implementing a wall-banger behavior with closed-loop speed adjustments.
+
+For more details, check out the in-depth blog post: https://www.half-built-robots.com/2025/03/02/building-roverbot-an-arduino-based-robot/
+
+## Hardware Overview
+
+- Base: RC car chassis with custom servo steering
+- Electronics: Arduino stackup with motor shield & prototyping board
+- Sensors: Ultrasonic for obstacle avoidance, encoder for speed, accelerometer for potential future use
+- Power: 9V for electronics & servos, 4xAA for drivetrain
+
+## Software Highlights
+
+- State Machine: Controls navigation, obstacle avoidance, and turning decisions
+- Hardware Abstraction Layer (HAL): Decouples low-level hardware control from high-level logic
+- Speed Controller: Uses encoder feedback to adjust PWM for different surfaces
+- OLED Display: Shows diagnostic info including state codes, sensor data, and motor status
+
+## Future Improvements (if I get around to it)
+
+- Integrate accelerometer into the control loop
+- Improve stuck detection with additional sensors
+- Refactor OLED driver for a better GUI structure

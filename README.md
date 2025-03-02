@@ -2,7 +2,10 @@
 Most of my smaller / earlier projects in hobby robotics. These are listed in the
 order of their creation (first is oldest, last is newest)
 
+Please also checkout my blog here : https://www.half-built-robots.com/
+
 ### Highschool
+- [BEAM Robots](./BEAM/README.md)
 - [Lego-Mindstorms ~ Beta-Rex](./Lego-Mindstorms/README.md)
 - [BOE-Bot](./BOE-Bot/README.md)
 - [Roverbot ~ Oldest Version](./Roverbot/README.md)
