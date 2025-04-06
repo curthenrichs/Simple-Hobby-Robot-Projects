@@ -1,6 +1,7 @@
 # Simple-Hobby-Robot-Projects
 Most of my smaller / earlier projects in hobby robotics. These are listed in the
-order of their creation (first is oldest, last is newest)
+order of their creation (first is oldest, last is newest). This project is archived 
+and will not be updated.
 
 Please also checkout my blog here : https://www.half-built-robots.com/
 
